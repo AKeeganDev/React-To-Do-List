@@ -6,7 +6,14 @@ import { FaTrash } from 'react-icons/fa';
 import styles from './TodoItem.module.css';
 
 const TodoItem = (props) => {
+  const {
+    todo, setUpdate, deleteTodoProps, handleChangeProps,
+  } = props;
+
+  const { completed, id, title } = todo;
+
   const [editing, setEditing] = useState(false);
+  const [newValue, setNewValue] = useState(todo.title);
 
   const handleEditing = () => {
     setEditing(true);
@@ -14,6 +21,7 @@ const TodoItem = (props) => {
 
   const handleUpdatedDone = (event) => {
     if (event.key === 'Enter') {
+      setUpdate(newValue, id);
       setEditing(false);
     }
   };
@@ -24,10 +32,6 @@ const TodoItem = (props) => {
     opacity: 0.4,
     textDecoration: 'line-through',
   };
-  const {
-    todo, setUpdate, deleteTodoProps, handleChangeProps,
-  } = props;
-  const { completed, id, title } = todo;
 
   const viewMode = {};
   const editMode = {};
@@ -40,7 +44,6 @@ const TodoItem = (props) => {
 
   useEffect(() => () => {
   }, []);
-
   return (
     <li className={styles.item}>
       <div onDoubleClick={handleEditing} style={viewMode}>
@@ -59,9 +62,9 @@ const TodoItem = (props) => {
         type="text"
         style={editMode}
         className={styles.textInput}
-        value={title}
+        value={newValue}
         onChange={(e) => {
-          setUpdate(e.target.value, id);
+          setNewValue(e.target.value);
         }}
         onKeyDown={handleUpdatedDone}
       />
